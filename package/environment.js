@@ -11,6 +11,7 @@ const ManifestPlugin = require('webpack-manifest-plugin')
 
 const config = require('./config')
 const assetHost = require('./asset_host')
+const { root, resolveRoot } = require('./root')
 
 function getLoaderMap() {
   const result = new Map()
@@ -41,7 +42,7 @@ function getExtensionsGlob() {
 function getEntryObject() {
   const result = {}
   const glob = getExtensionsGlob()
-  const rootPath = join(config.source_path, config.source_entry_path)
+  const rootPath = join(root, config.source_path, config.source_entry_path)
   const paths = sync(join(rootPath, glob))
   paths.forEach((path) => {
     const namespace = relative(join(rootPath), dirname(path))
@@ -52,9 +53,9 @@ function getEntryObject() {
 }
 
 function getModulePaths() {
-  let result = [resolve(config.source_path), 'node_modules']
+  let result = [resolveRoot(config.source_path), join(root, 'node_modules')]
   if (config.resolved_paths) {
-    result = result.concat(config.resolved_paths)
+    result = result.concat(config.resolved_paths.map(path => join(root, path)))
   }
   return result
 }
