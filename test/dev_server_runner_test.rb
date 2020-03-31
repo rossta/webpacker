@@ -24,6 +24,25 @@ class DevServerRunnerTest < Webpacker::Test
     verify_command(cmd, use_node_modules: false)
   end
 
+  def test_run_cmd_with_integrity_check
+    cmd = ["#{test_app_path}/node_modules/.bin/webpack-dev-server", "--config", "#{test_app_path}/config/webpack/development.js"]
+
+    app_root = Pathname.new(test_app_path)
+    mock_config = Webpacker::Configuration.new(
+      root_path: app_root,
+      config_path: app_root.join("config/webpacker.yml"),
+      env: ENV["RAILS_ENV"]
+    )
+
+    Webpacker::Configuration.stub(:new, mock_config) do
+      mock_config.stub(:check_yarn_integrity?, true) do
+        Webpacker::Runner.stub(:check_yarn_integrity!, "success") do
+          verify_command(cmd)
+        end
+      end
+    end
+  end
+
   private
     def test_app_path
       File.expand_path("test_app", __dir__)

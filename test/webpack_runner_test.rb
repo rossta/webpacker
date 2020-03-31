@@ -24,6 +24,21 @@ class WebpackRunnerTest < Webpacker::Test
     verify_command(cmd, use_node_modules: false)
   end
 
+  def test_run_cmd_with_integrity_check
+    cmd = ["#{test_app_path}/node_modules/.bin/webpack", "--config", "#{test_app_path}/config/webpack/development.js"]
+
+    mock_config = Minitest::Mock.new
+    mock_config.expect(:check_yarn_integrity?, true)
+
+    Webpacker::Configuration.stub(:new, mock_config) do
+      Webpacker::Runner.stub(:check_yarn_integrity!, "success") do
+        verify_command(cmd)
+      end
+    end
+
+    mock_config.verify
+  end
+
   private
     def test_app_path
       File.expand_path("test_app", __dir__)

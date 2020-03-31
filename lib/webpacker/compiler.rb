@@ -14,6 +14,7 @@ class Webpacker::Compiler
 
   def initialize(webpacker)
     @webpacker = webpacker
+    @check_yarn_integrity = config.check_yarn_integrity?
   end
 
   def compile
@@ -25,6 +26,7 @@ class Webpacker::Compiler
         # take place when it should.
         # See https://github.com/rails/webpacker/issues/2113
         record_compilation_digest
+        record_yarn_integrity_check
       end
     else
       logger.info "Everything's up-to-date. Nothing to do"
@@ -59,6 +61,14 @@ class Webpacker::Compiler
     def record_compilation_digest
       config.cache_path.mkpath
       compilation_digest_path.write(watched_files_digest)
+    end
+
+    def record_yarn_integrity_check
+      @check_yarn_integrity = false
+    end
+
+    def check_yarn_integrity?
+      !!@check_yarn_integrity
     end
 
     def run_webpack
@@ -99,9 +109,12 @@ class Webpacker::Compiler
     end
 
     def webpack_env
-      return env unless defined?(ActionController::Base)
+      local_env = env.dup
+      local_env.merge!("WEBPACKER_CHECK_YARN_INTEGRITY" => "true") if check_yarn_integrity?
 
-      env.merge("WEBPACKER_ASSET_HOST"        => ENV.fetch("WEBPACKER_ASSET_HOST", ActionController::Base.helpers.compute_asset_host),
-                "WEBPACKER_RELATIVE_URL_ROOT" => ENV.fetch("WEBPACKER_RELATIVE_URL_ROOT", ActionController::Base.relative_url_root))
+      return local_env unless defined?(ActionController::Base)
+
+      local_env.merge("WEBPACKER_ASSET_HOST"        => ENV.fetch("WEBPACKER_ASSET_HOST", ActionController::Base.helpers.compute_asset_host),
+                      "WEBPACKER_RELATIVE_URL_ROOT" => ENV.fetch("WEBPACKER_RELATIVE_URL_ROOT", ActionController::Base.relative_url_root))
     end
 end

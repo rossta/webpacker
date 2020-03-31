@@ -6,6 +6,8 @@ module Webpacker
     def run
       env = Webpacker::Compiler.env
 
+      check_yarn_integrity!
+
       cmd = if node_modules_bin_exist?
         ["#{@node_modules_bin_path}/webpack"]
       else

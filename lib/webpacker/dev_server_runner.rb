@@ -7,21 +7,14 @@ require "webpacker/runner"
 module Webpacker
   class DevServerRunner < Webpacker::Runner
     def run
-      load_config
+      check_yarn_integrity!
+      setup_dev_server
       detect_port!
       execute_cmd
     end
 
     private
-      def load_config
-        app_root = Pathname.new(@app_path)
-
-        config = Configuration.new(
-          root_path: app_root,
-          config_path: app_root.join("config/webpacker.yml"),
-          env: ENV["RAILS_ENV"]
-        )
-
+      def setup_dev_server
         dev_server = DevServer.new(config)
 
         @hostname          = dev_server.host

@@ -64,6 +64,7 @@ class Webpacker::Configuration
   end
 
   def check_yarn_integrity=(value)
+    warn "Webpacker::Configuration#check_yarn_integrity=(value) is deprecated. Please set check_yarn_integrity in config/webpacker.yml instead."
     data[:check_yarn_integrity] = value
   end
 
