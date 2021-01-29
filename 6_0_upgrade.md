@@ -7,11 +7,11 @@ straightforward.
 ## Preparation
 
 1. If your `source_path` is `app/javascript`, rename it to `app/packs`
-2. If your `source_entry_path` is `app/javascript/packs`, rename it to `app/packs/entrypoints`
-3. Rename `config/webpack` to `config/webpack_old`
-4. Rename `config/webpacker.yml` to `config/webpacker_old.yml`
-5. Uninstall the current version of `webpack-dev-server`: `yarn remove webpack-dev-server`
-6. Upgrade webpacker
+1. If your `source_entry_path` is `app/javascript/packs`, rename it to `app/packs/entrypoints`
+1. Rename `config/webpack` to `config/webpack_old`
+1. Rename `config/webpacker.yml` to `config/webpacker_old.yml`
+1. Uninstall the current version of `webpack-dev-server`: `yarn remove webpack-dev-server`
+1. Upgrade webpacker
 
   ```ruby
   # Gemfile
@@ -33,9 +33,9 @@ straightforward.
 - Change `javascript_pack_tag` and `stylesheet_pack_tag` to `javascript_packs_with_chunks_tag` and
   `stylesheet_packs_with_chunks_tag`
 
-7. If you are using any integrations like `css`, `React` or `TypeScript`. Please see https://github.com/rails/webpacker#integrations section on how they work in v6.0.
+1. If you are using any integrations like `css`, `React` or `TypeScript`. Please see https://github.com/rails/webpacker#integrations section on how they work in v6.0.
 
-8. Copy over any custom webpack config from `config/webpack_old`
+1. Copy over any custom webpack config from `config/webpack_old`
 
   ```js
   // config/webpack/base.js
@@ -45,4 +45,4 @@ straightforward.
   module.exports = merge(webpackConfig, customConfig)
   ```
 
-9. Copy over custom browserlist config from `.browserlistrc` if it exists into the `"browserlist"` key in `package.json` and remove `.browserslistrc`.
+1. Copy over custom browserlist config from `.browserlistrc` if it exists into the `"browserlist"` key in `package.json` and remove `.browserslistrc`.
