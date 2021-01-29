@@ -45,4 +45,6 @@ straightforward.
   module.exports = merge(webpackConfig, customConfig)
   ```
 
+1. Review any settings you'd like to keep from `config/webpacker_old.yml` that changed in `config/webpacker.yml`. Note that the default `source_path` changes from `app/javascript` to `app/packs` and `source_entry_path` changes from `packs` to `entrypoints` so you'll need to update `webpacker.yml` or your directory structure accordingly.
+
 1. Copy over custom browserlist config from `.browserlistrc` if it exists into the `"browserlist"` key in `package.json` and remove `.browserslistrc`.
